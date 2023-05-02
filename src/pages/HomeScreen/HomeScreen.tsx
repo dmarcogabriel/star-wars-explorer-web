@@ -1,14 +1,26 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import * as MUI from '@mui/material';
 
+import { useAppDispatch } from '@hooks/useAppDispatch';
 import { useAppSelector } from '@hooks/useAppSelector';
 
 import { selectMovies } from '@store/movies/moviesSelectors';
+import { getMovies } from '@store/movies/moviesSlice';
 
 import MovieList from './MoviesList';
 
 export default function HomeScreen() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getMovies());
+  }, [dispatch]);
+
   const { list, isLoading, error } = useAppSelector(selectMovies);
+
+  const handleReload = () => {
+    dispatch(getMovies());
+  };
 
   const sortedList = useMemo(() => {
     return [...list].sort((a, b) => a.episode_id - b.episode_id);
@@ -34,6 +46,16 @@ export default function HomeScreen() {
           <MovieList movies={sortedList} isLoading={isLoading} />
         </MUI.Card>
       </MUI.Container>
+      <MUI.Snackbar
+        open={error}
+        autoHideDuration={5000}
+        onClose={handleReload}
+        message="Something went wrong!"
+      >
+        <MUI.Alert onClose={handleReload} severity="error" variant="filled">
+          This is a success message!
+        </MUI.Alert>
+      </MUI.Snackbar>
     </MUI.Box>
   );
 }

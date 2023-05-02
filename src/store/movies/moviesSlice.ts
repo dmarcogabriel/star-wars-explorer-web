@@ -1,9 +1,8 @@
-// import type { PayloadAction } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { IMovie } from '@interfaces/movieInterface';
-
-import { mockMovies } from '@__mocks__/movies';
+import { IGetMoviesResponse } from '@interfaces/movieStoreInterface';
 
 interface MoviesState {
   isLoading: boolean;
@@ -14,7 +13,7 @@ interface MoviesState {
 
 const initialState: MoviesState = {
   isLoading: false,
-  list: mockMovies,
+  list: [],
   error: false,
   watched: [],
 };
@@ -23,11 +22,35 @@ export const moviesSlice = createSlice({
   name: 'movie',
   initialState,
   reducers: {
-    // todo: add reducers
+    getMovies(state) {
+      state.error = false;
+      state.isLoading = true;
+    },
+    getMoviesSuccess(state, { payload }: PayloadAction<IGetMoviesResponse>) {
+      state.isLoading = false;
+      state.list = payload.results;
+    },
+    getMoviesFailure(state) {
+      state.isLoading = false;
+      state.error = true;
+    },
+    setWatchedMovie(state, { payload }: PayloadAction<{ movieUrl: string }>) {
+      if (state.watched.some(movieUrl => movieUrl === payload.movieUrl)) {
+        state.watched = state.watched.filter(
+          movieUrl => movieUrl !== payload.movieUrl,
+        );
+      } else {
+        state.watched = [...state.watched, payload.movieUrl];
+      }
+    },
   },
 });
 
-// todo: uncomment next line
-// export const {} = moviesSlice.actions;
+export const {
+  getMovies,
+  getMoviesFailure,
+  getMoviesSuccess,
+  setWatchedMovie,
+} = moviesSlice.actions;
 
 export default moviesSlice.reducer;
