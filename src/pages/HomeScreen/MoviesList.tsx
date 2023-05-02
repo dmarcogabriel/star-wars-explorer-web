@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { Box, Card, Checkbox, Skeleton, Typography } from '@mui/material';
 
 import { IMovie } from '@interfaces/movieInterface';
@@ -23,18 +24,30 @@ export default function MoviesList({ movies, isLoading }: IProps) {
       {!isLoading &&
         movies.map(movie => (
           <Card key={movie.url} sx={{ p: 1, my: 2 }}>
-            <Typography
-              key={movie.url}
-            >{`Episode #${movie.episode_id}`}</Typography>
-            <Typography>Title</Typography>
-            <Typography>{movie.title}</Typography>
-            <Typography>{`Released at ${
-              movie.release_date.split('-')[0]
-            }`}</Typography>
-            <Typography>Watched</Typography>
-            <Checkbox color="success" checked={true}></Checkbox>
+            <Typography variant="subtitle1">{`Episode #${movie.episode_id}`}</Typography>
+            <Typography variant="subtitle2">Title</Typography>
+            <Typography variant="h3">{movie.title}</Typography>
+            <Row
+              sx={{
+                mt: 1,
+              }}
+            >
+              <Typography variant="subtitle1">{`Released at ${
+                movie.release_date.split('-')[0]
+              }`}</Typography>
+              <Row>
+                <Typography variant="subtitle1">Watched</Typography>
+                <Checkbox color="success" checked={true}></Checkbox>
+              </Row>
+            </Row>
           </Card>
         ))}
     </Box>
   );
 }
+
+const Row = styled(Box)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;

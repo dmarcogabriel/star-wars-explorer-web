@@ -15,7 +15,7 @@ export default function HomeScreen() {
   }, [list]);
 
   return (
-    <>
+    <MUI.Box sx={{ height: '100vh', backgroundColor: 'background.default' }}>
       <MUI.AppBar component="nav">
         <MUI.Toolbar>
           <MUI.Typography>Star Wars Explorer</MUI.Typography>
@@ -34,6 +34,6 @@ export default function HomeScreen() {
           <MovieList movies={sortedList} isLoading={isLoading} />
         </MUI.Card>
       </MUI.Container>
-    </>
+    </MUI.Box>
   );
 }

@@ -1,4 +1,4 @@
-import {IMovie} from '@interfaces/movieInterface';
+import { IMovie } from '@interfaces/movieInterface';
 
 export const mockMovies: IMovie[] = [
   {
